@@ -19,8 +19,10 @@ It will now look for all principled shaders within that node and convert them to
 In the kitbash object node add a  Primivite Wrangle node before the Output node.
 Add this vex (example for Hong Kong kit, change the KB3D_HOK to your node name e.g. '/obj/KB3D_AOE/matnet' for Egypt kit )
 
+```
 @shop_materialpath = replace(s@shop_materialpath , '/obj/KB3D_HOK/matnet' , '/obj/3dlmatnet') ;
 @shop_materialpath += "/dlTerminal1" ;
+```
 
 .. Restart the viewport render so the new materials are used.
 
