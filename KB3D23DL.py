@@ -7,6 +7,8 @@
         
 import hou
 
+ior_default = 1.52 #Glass IOR
+
 def get_kb3d_materials(shader_path):
     # Returns all the principled shader nodes in the path
 
@@ -203,9 +205,9 @@ def create_glass(texture_dict, matnet_name):
     glass = matbuilder.createNode("3Delight::dlGlass", "dlGlass_" + texture_dict['name'])
     terminal.setInput(0, glass, 0)
     glass_parm1 = glass.parm("reflect_ior")
-    glass_parm1.set("1.52")
+    glass_parm1.set(ior_default)
     glass_parm2 = glass.parm("refract_ior")
-    glass_parm2.set("1.52")
+    glass_parm2.set(ior_default)
     
     # create 3dl uv
     uv = matbuilder.createNode("3Delight::dlUV", "UV")
@@ -239,8 +241,9 @@ def create_glass(texture_dict, matnet_name):
         refract_texture_parm2 = refract_texture.parm("textureFile_meta_colorspace")
         refract_texture_parm2.set("linear")
         refract_texture.setInput(20, uv, 0)
-        glass.setInput(2, refract_texture, 1)
-        glass.setInput(8, refract_texture, 1)
+        if (dont_use_refract_texture == 1):
+            glass.setInput(2, refract_texture, 1)
+            glass.setInput(8, refract_texture, 1)
         
     # create 3dl normal texture
     if (texture_dict["normal"] != ""):
@@ -319,6 +322,14 @@ def main():
     process_materials(materials_list, matnet_name)
     print("Finished Processing")
 
+    
+dont_use_refract_texture = hou.ui.displayMessage(
+    "Use IOR of Glass rather than refraction texture?",
+    buttons=("Yes", "No"),
+    close_choice=1 
+)
+print(dont_use_refract_texture)
+    
 main()
 
     
